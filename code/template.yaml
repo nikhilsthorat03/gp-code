@@ -1,0 +1,18 @@
+Resources:
+  ETLLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: test
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.9
+      Role: arn:aws:iam::891612579745:role/etl-lambda-role-3eza6xnd
+      Code:
+        S3Bucket: !Sub "${CodePipelineArtifactBucket}"
+        S3Key: !Sub "${CodePipelineArtifactObjectKey}"
+      Timeout: 10
+  LiveAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !Ref ETLLambdaFunction
+      FunctionVersion: !GetAtt ETLLambdaFunction.Version
+      Name: live
